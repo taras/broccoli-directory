@@ -1,8 +1,6 @@
 import Concat = require('broccoli-concat/concat');
-import fs = require('fs-extra');
 import path = require('path');
 import findIndex = require('find-index');
-import merge = require('lodash.merge');
 
 export default class ReduceFilter extends Concat {
 
