@@ -1,0 +1,37 @@
+{
+  "name": "broccoli-directory",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "postinstall": "npm install typings -g; typings install"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "broccoli": "1.1.1",
+    "broccoli-filter": "taras/broccoli-filter#9242b7e7dd47e28c62b6701fb960f9289fbabb62",
+    "find-index": "1.1.0",
+    "lodash.merge": "4.6.0",
+    "typescript": "2.3.2"
+  },
+  "devDependencies": {
+    "broccoli-concat": "3.2.2",
+    "broccoli-fixturify": "0.3.0",
+    "fixturify": "0.3.3",
+    "jest": "20.0.0"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "<rootDir>/preprocessor.js"
+    },
+    "testMatch": [
+      "**/__tests__/*.(ts|js)"
+    ]
+  }
+}
