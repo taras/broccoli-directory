@@ -18,7 +18,8 @@
     "broccoli-concat": "3.2.2",
     "broccoli-filter": "taras/broccoli-filter#9242b7e7dd47e28c62b6701fb960f9289fbabb62",
     "find-index": "1.1.0",
-    "typescript": "2.3.2"
+    "typescript": "2.3.2",
+    "broccoli-funnel": "^1.0.1"
   },
   "devDependencies": {
     "broccoli-fixturify": "0.3.0",

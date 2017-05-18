@@ -21,6 +21,33 @@ afterEach(() => {
   }
 });
 
+describe('instantiation', function() {
+  let result;
+  beforeEach(() => {
+    fixturify.writeSync('testdir', {
+      'taras.txt': 'taras was here'
+    }); 
+    let dir = new Directory('testdir');
+    builder = new broccoli.Builder(dir);
+
+    return builder.build()
+      .then(() => {
+        result = fixturify.readSync(builder.outputPath);
+      });
+  });
+
+  afterEach(() => {
+    fixturify.writeSync('testdir', null); 
+  });
+
+  test('from string path', () => {
+    expect(result).toEqual({
+      'taras.txt': 'taras was here'
+    });
+  });
+
+});
+
 describe('map', () => {
 
   let result;

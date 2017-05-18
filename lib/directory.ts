@@ -2,12 +2,25 @@ import ReduceFilter from './filters/reduce';
 import MapFilter from './filters/map';
 import FilterFilter from './filters/filter';
 import Plugin = require('broccoli-plugin');
+import Funnel = require('broccoli-funnel');
 
 export default class Directory {
   private node;
 
   constructor(node) {
+    if (typeof node === 'string') {
+      node = new Funnel(node);
+    }
     this.node = node;
+  }
+
+  /**
+   * getCallbackObject, __broccoliFeatures__ and __broccoliGetInfo__
+   * make instances of Directory look like Broccoli nodes to Broccoli Builder.
+   * The Directory instance delegates build to the node that it wraps.
+   */
+  getCallbackObject() {
+    return this.node;
   }
 
   __broccoliFeatures__ = Plugin.prototype.__broccoliFeatures__;
@@ -43,9 +56,5 @@ export default class Directory {
     });
 
     return new Directory(node);
-  }
-
-  getCallbackObject() {
-    return this.node;
   }
 }
