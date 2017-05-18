@@ -24,20 +24,13 @@ afterEach(() => {
 describe('instantiation', function() {
   let result;
   beforeEach(() => {
-    fixturify.writeSync('testdir', {
-      'taras.txt': 'taras was here'
-    }); 
-    let dir = new Directory('testdir');
+    let dir = new Directory('__tests__/fixtures/testdir');
     builder = new broccoli.Builder(dir);
 
     return builder.build()
       .then(() => {
         result = fixturify.readSync(builder.outputPath);
       });
-  });
-
-  afterEach(() => {
-    fixturify.writeSync('testdir', null); 
   });
 
   test('from string path', () => {
