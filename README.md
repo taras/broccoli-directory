@@ -11,27 +11,26 @@ my-files/
   yet-another-file.txt
 ```
 
+## Using with Broccoli.js
+
 You can get a new directory with whitespace removed from every file by doing the following,
 
 ```js
 // Broccoli.js
-const Directory = require('broccoli-directory');
+const $d = require('broccoli-directory');
 
-let dir = new Directory('my-files');
-
-module.exports = dir
-  // map will receive content of the file, returned value will be written to the new file
+// map will receive content of the file, returned value will be written to the new file
+module.exports = $d('my-files')
   .map(text => text.replace(/\s/g,''))
 ```
 
 You can chain these operations in same way as you would with arrays.
 
 ```js
-const Directory = require('broccoli-directory');
+// Broccoli.js
+const $d = require('broccoli-directory');
 
-let dir = new Directory('my-files');
-
-module.exports = dir
+module.exports = $d('my-files')
   // exclude other-file.txt from build
   .filter((text, relativePath) => relativePath !== 'other-file.txt')
   // remote whitespace from remaining files
@@ -44,13 +43,29 @@ module.exports = dir
 You can also reduce a directory into a single file.
 
 ```js
-const Directory = require('broccoli-directory');
+// Broccoli.js
+const $d = require('broccoli-directory');
 
-let dir = new Directory('my-files');
-
-module.exports = dir
+module.exports = $d('my-files')
   .reduce((accumulator, text) => accumulator + text, '', 'result.txt');
   // will build a directoryw result.txt that has content from all files in it 
 ```
 
-There is lots more that can be done with this pattern, but this is a proof of concept. Let me know what you think about this.
+## Using in a node script
+
+You can use this library to process a directory of files in any node.js script.
+
+```js
+// index.js
+const $d = require('broccoli-directory');
+
+// map will receive content of the file, returned value will be written to the new file
+  $d('my-files')
+    .map(text => text.replace(/\s/g,''))
+    .build()
+    .then(outputDir => {
+      // outputDir is path to a tmp directory where the built result is
+    });
+```
+
+```

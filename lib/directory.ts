@@ -3,7 +3,7 @@ import MapFilter from './filters/map';
 import FilterFilter from './filters/filter';
 import Plugin = require('broccoli-plugin');
 import Funnel = require('broccoli-funnel');
-
+import broccoli = require('broccoli');
 export default class Directory {
   private node;
 
@@ -56,5 +56,13 @@ export default class Directory {
     });
 
     return new Directory(node);
+  }
+
+  build() {
+    let builder = new broccoli.Builder(this);
+    return builder.build()
+      .then(() => {
+        return builder.outputPath;
+      });
   }
 }
