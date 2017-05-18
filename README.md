@@ -22,11 +22,7 @@ let dir = new Directory('my-files');
 module.exports = dir
   // map will receive content of the file, returned value will be written to the new file
   .map(text => text.replace(/\s/g,''))
-  // toTree will return tree that Broccoli can build
-  .toTree();
 ```
-
-`dir.toTree()` at the end of the chain will give you the node that Broccoli builder can build.
 
 You can chain these operations in same way as you would with arrays.
 
@@ -39,8 +35,7 @@ module.exports = dir
   // exclude other-file.txt from build
   .filter((text, relativePath) => relativePath !== 'other-file.txt')
   // remote whitespace from remaining files
-  .map(text => text.replace(/\s/g,''))
-  .toTree();
+  .map(text => text.replace(/\s/g,''));
   // this will produce a directory with
   // some-file.txt
   // yet-another-file.txt
@@ -54,8 +49,7 @@ const Directory = require('broccoli-directory');
 let dir = new Directory('my-files');
 
 module.exports = dir
-  .reduce((accumulator, text) => accumulator + text, '', 'result.txt')
-  .toTree();
+  .reduce((accumulator, text) => accumulator + text, '', 'result.txt');
   // will build a directoryw result.txt that has content from all files in it 
 ```
 

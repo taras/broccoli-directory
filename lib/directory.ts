@@ -1,12 +1,19 @@
 import ReduceFilter from './filters/reduce';
 import MapFilter from './filters/map';
 import FilterFilter from './filters/filter';
+import Plugin = require('broccoli-plugin');
 
 export default class Directory {
   private node;
 
   constructor(node) {
     this.node = node;
+  }
+
+  __broccoliFeatures__ = Plugin.prototype.__broccoliFeatures__;
+
+  __broccoliGetInfo__(builderFeatures) {
+    return Plugin.prototype.__broccoliGetInfo__.bind(this.node)(builderFeatures);
   }
 
   map(callback: (content: string, relativePath: string) => any) {
@@ -38,7 +45,7 @@ export default class Directory {
     return new Directory(node);
   }
 
-  toTree() {
+  getCallbackObject() {
     return this.node;
   }
 }

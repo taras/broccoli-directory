@@ -30,7 +30,6 @@ describe('map', () => {
     builder = new broccoli.Builder(
       dir
         .map(content => `<a>${content}</a>`)
-        .toTree()
     )
 
     return builder.build()
@@ -60,7 +59,6 @@ describe('filter', () => {
     builder = new broccoli.Builder(
       dir
         .filter(content => content !== 'B')
-        .toTree()
     )
 
     return builder.build()
@@ -95,8 +93,7 @@ describe('reduce', () => {
 
     builder = new broccoli.Builder(
       dir
-        .reduce((accumulator, content) => accumulator + content, '', 'result.txt')
-        .toTree()
+        .reduce((accumulator, content) => accumulator + content, '', 'result.txt') 
     )
 
     return builder.build()
@@ -132,7 +129,7 @@ describe('composition', () => {
         .map(text => text.replace(/\s/g,''))
         .filter(text => text !== 'c')
         .reduce((accumulator, text) => accumulator + text, '', 'result.txt')
-        .toTree()
+        
     );
 
     return builder.build()
