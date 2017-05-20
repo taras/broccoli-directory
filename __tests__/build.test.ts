@@ -1,24 +1,33 @@
-import $ from '../index';
+import $d from '../index';
 import fixturify = require('fixturify');
+import tempdirectory = require('tempdirectory');
 
 let dir;
 beforeEach(() => {
-  dir = $('__tests__/fixtures/testdir').map(content => `*${content}*`);
+  dir = $d('__tests__/fixtures/testdir').map(content => `*${content}*`);
 });
 
 describe('build', () => {
 
-  let outputDir;
-  beforeEach(() => {
+  test('promise resolves with output path', () => {
     return dir.build()
-      .then(_outputDir => outputDir = _outputDir);
+      .then(builder => {
+        expect(builder.outputPath).toBeDefined();
+        expect(typeof builder.outputPath).toBe('string');
+        expect(fixturify.readSync(builder.outputPath)).toEqual({
+          'taras.txt': '*taras was here*'
+        });
+        return builder.cleanup();
+      });
   });
 
-  test('resolves with output path', () => {
-    expect(outputDir).toBeDefined();
-    expect(typeof outputDir).toBe('string');
-    expect(fixturify.readSync(outputDir)).toEqual({
-      'taras.txt': '*taras was here*'
+  test('copies files to specified path', () => {
+    let temp = tempdirectory();
+    return dir.build(temp).then(builder => {
+      expect(fixturify.readSync(temp)).toEqual({
+        'taras.txt': '*taras was here*'
+      });
+      return builder.cleanup();
     });
   });
 

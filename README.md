@@ -62,10 +62,9 @@ const $d = require('broccoli-directory');
 // map will receive content of the file, returned value will be written to the new file
   $d('my-files')
     .map(text => text.replace(/\s/g,''))
-    .build()
-    .then(outputDir => {
-      // outputDir is path to a tmp directory where the built result is
+    .build('dist') // where should the build result be copied (omit this argument to skip copying)
+    .then(builder => {
+      // builder.outputPath is path to a tmp directory where the built result is
+      return builder.cleanup(); // call builder.cleanup() to remove all temp directories that were created.
     });
-```
-
 ```

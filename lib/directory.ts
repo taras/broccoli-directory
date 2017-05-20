@@ -4,6 +4,7 @@ import FilterFilter from './filters/filter';
 import Plugin = require('broccoli-plugin');
 import Funnel = require('broccoli-funnel');
 import broccoli = require('broccoli');
+import copyDereference = require('copy-dereference');
 export default class Directory {
   private node;
 
@@ -58,11 +59,18 @@ export default class Directory {
     return new Directory(node);
   }
 
-  build() {
+  build(outputDir) {
     let builder = new broccoli.Builder(this);
-    return builder.build()
-      .then(() => {
-        return builder.outputPath;
+    let promise = builder.build()
+      .then(() => builder);
+
+    if (outputDir) {
+      promise.then(builder => {
+        copyDereference.sync(builder.outputPath, outputDir);
+        return builder;
       });
+    }
+
+    return promise;
   }
 }
