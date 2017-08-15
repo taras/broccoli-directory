@@ -156,6 +156,7 @@ describe('directory', () => {
   describe('merge', () => {
     let result;
 
+    let $da, $db;
     beforeEach(() => {
       let a = new Fixturify({
         'a.txt': 'a',
@@ -165,21 +166,30 @@ describe('directory', () => {
         'b.txt': 'b',
       });
 
-      let $da = new Directory(a);
-      let $db = new Directory(b);
+      $da = new Directory(a);
+      $db = new Directory(b);
+    });
+
+    test('all of the filters were applied', function() {
+      expect.assertions(1);
 
       builder = new broccoli.Builder($da.merge(() => $db));
 
       return builder.build().then(() => {
         result = fixturify.readSync(builder.outputPath);
+        expect(result).toEqual({
+          'a.txt': 'a',
+          'b.txt': 'b',
+        });
       });
     });
 
-    test('all of the filters were applied', function() {
-      expect(result).toEqual({
-        'a.txt': 'a',
-        'b.txt': 'b',
-      });
+    test('bad return', () => {
+      expect.assertions(1);
+
+      expect(() => {
+        builder = new broccoli.Builder($da.merge(() => null));
+      }).toThrowError(/merge operation must return a tree instead got/);
     });
   });
 
@@ -212,6 +222,31 @@ describe('directory', () => {
     test('all of the filters were applied', function() {
       expect(result).toEqual({
         'a.txt': '*a*',
+      });
+    });
+  });
+
+  describe('find', () => {
+    let result;
+
+    beforeEach(() => {
+      let a = new Fixturify({
+        'a.txt': 'a',
+        'script.js': `console.log('hello world')`,
+      });
+
+      let $d = new Directory(a);
+
+      builder = new broccoli.Builder($d.find('*.js'));
+
+      return builder.build().then(() => {
+        result = fixturify.readSync(builder.outputPath);
+      });
+    });
+
+    test('only js files', () => {
+      expect(result).toEqual({
+        'script.js': `console.log('hello world')`,
       });
     });
   });

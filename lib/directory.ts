@@ -75,8 +75,19 @@ export default class Directory {
     return new Directory(node);
   }
 
-  merge(callback: (tree) => any) {
-    const node = new BroccoliMergeTrees([this.node, callback(this.node)]);
+  merge(callback: () => any) {
+    const toBeMerged = callback();
+    if (!toBeMerged) {
+      throw Error(
+        `merge operation must return a tree instead got ${toBeMerged}`,
+      );
+    }
+    const node = new BroccoliMergeTrees([this.node, toBeMerged]);
+    return new Directory(node);
+  }
+
+  find(selector: string) {
+    let node = BroccoliStew.find(this.node, selector);
     return new Directory(node);
   }
 
